@@ -25,7 +25,19 @@ func _physics_process(delta: float) -> void:
 	
 	direction = (get_global_mouse_position() - position).normalized()
 	
-	move_and_slide(velo)
+	var col = move_and_collide(velo * delta)
+	
+	if col:
+		velo /= 2
+		velo = velo.bounce(col.normal)
+	#print(col)
+	#if is_on_ceiling() or is_on_floor():
+		#velo.x = velo.x/2
+		#velo.y = -velo.y/2
+			
+	#if is_on_wall():
+		#velo.x = -velo.x/2
+		#velo.y = velo.y/2
 	
 	#print((get_global_mouse_position() - position).length())
 	
@@ -40,7 +52,7 @@ func _physics_process(delta: float) -> void:
 			
 	if Input.is_action_pressed("schut"):
 		var i = bullet.instance()
-		i.rot = rotation
-		i.position = position
+		i.rot = rotation - deg2rad(90)
+		i.position = $position_calc.global_position
 		add_child(i)
 

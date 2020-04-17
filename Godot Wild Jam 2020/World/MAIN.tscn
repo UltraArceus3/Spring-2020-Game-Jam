@@ -9,4 +9,5 @@
 position = Vector2( 481.716, 360.408 )
 
 [node name="Bullet" parent="." instance=ExtResource( 2 )]
-position = Vector2( 168.336, 124.231 )
+position = Vector2( 158.814, 126.951 )
+scale = Vector2( 100, 1 )
