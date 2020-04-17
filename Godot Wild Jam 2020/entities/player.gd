@@ -52,7 +52,7 @@ func _physics_process(delta: float) -> void:
 			
 	if Input.is_action_pressed("schut"):
 		var i = bullet.instance()
-		i.rot = rotation - deg2rad(90)
+		i.rot = rotation
 		i.position = $position_calc.global_position
-		add_child(i)
+		get_parent().add_child(i)
 
