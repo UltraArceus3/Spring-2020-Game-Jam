@@ -12,8 +12,8 @@ extents = Vector2( 28.3924, 27.004 )
 script = ExtResource( 2 )
 
 [node name="Camera2D" type="Camera2D" parent="."]
-visible = false
 current = true
+zoom = Vector2( 2, 2 )
 
 [node name="position_calc" type="Node2D" parent="."]
 visible = false

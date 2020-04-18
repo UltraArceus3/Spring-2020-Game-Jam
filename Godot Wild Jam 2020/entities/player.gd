@@ -51,7 +51,7 @@ func _physics_process(delta: float) -> void:
 	#print(angleMouse)
 	if angleMouse != 0:
 		rotation += aim_speed*angleMouse
-
+	
 
 	if Input.is_action_pressed("forward"):
 		if abs((get_global_mouse_position() - position).length()) > 3:
@@ -62,4 +62,7 @@ func _physics_process(delta: float) -> void:
 		i.rot = rotation
 		i.position = $position_calc.global_position
 		get_parent().add_child(i)
+		
+	if Input.is_action_pressed("STOP"):
+		velo = Vector2.ZERO
 

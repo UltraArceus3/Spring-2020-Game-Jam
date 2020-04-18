@@ -18,3 +18,8 @@ func _physics_process(delta: float) -> void:
 	#move_and_collide()
 	if rotation != rot:
 		rotation = rot
+
+
+
+func _on_destroyTime_timeout() -> void:
+	queue_free()
