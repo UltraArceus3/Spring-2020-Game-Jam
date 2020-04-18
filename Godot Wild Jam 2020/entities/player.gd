@@ -5,6 +5,8 @@ var aim_speed = deg2rad(10)
 var direction
 var velo = Vector2.ZERO
 
+export var ShaftBody = 0
+
 var bullet = preload("res://entities/Bullet.tscn")
 
 export var acceleration = 5
@@ -21,6 +23,9 @@ func _ready() -> void:
 	pass # Replace with function body.
 
 func _physics_process(delta: float) -> void:
+	
+	$ShaftCol.scale = $Shaft.get_child(ShaftBody).get_child(2).scale
+	
 	angleMouse = stepify(get_angle_to(get_global_mouse_position())+deg2rad(90), 0.1)
 	
 	direction = (get_global_mouse_position() - position).normalized()
@@ -30,6 +35,8 @@ func _physics_process(delta: float) -> void:
 	if col:
 		velo /= 2
 		velo = velo.bounce(col.normal)
+		
+	
 	#print(col)
 	#if is_on_ceiling() or is_on_floor():
 		#velo.x = velo.x/2
