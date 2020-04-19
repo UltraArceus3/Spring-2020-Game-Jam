@@ -20,14 +20,17 @@ script = ExtResource( 8 )
 script = ExtResource( 3 )
 
 [node name="Player" parent="Entities" instance=ExtResource( 1 )]
-position = Vector2( 1250.26, 476.797 )
+position = Vector2( 5602.92, 3029.86 )
+rotation = 1.02139
 playerControl = true
 
 [node name="Player2" parent="Entities" instance=ExtResource( 1 )]
-position = Vector2( 2443.91, 821.753 )
+position = Vector2( 6796.57, 3374.81 )
+rotation = 1.02139
 
 [node name="Player3" parent="Entities" instance=ExtResource( 1 )]
-position = Vector2( 2049.94, 1341.39 )
+position = Vector2( 6402.6, 3894.45 )
+rotation = 1.02139
 
 [node name="arrow" parent="." instance=ExtResource( 7 )]
 position = Vector2( 484.077, 286.369 )

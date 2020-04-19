@@ -53,6 +53,11 @@ func _ready() -> void:
 		playerColor[0].main = randomColor()
 		$ShootTimeout.wait_time = 1
 		
+	randomize()
+	position.x = randi()% 25000
+	randomize()
+	position.y = randi()% 25000
+		
 
 
 func _physics_process(delta: float) -> void:

@@ -17,9 +17,9 @@ func _physics_process(delta: float) -> void:
 	while entityCount < entityAmount:
 		var i = entity.instance()
 		randomize()
-		i.position.x = randi()% 100000
+		i.position.x = randi()% 25000
 		randomize()
-		i.position.y = randi()% 100000
+		i.position.y = randi()% 25000
 		
 		self.add_child(i)
 		
