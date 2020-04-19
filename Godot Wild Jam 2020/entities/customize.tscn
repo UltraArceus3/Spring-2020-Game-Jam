@@ -1,9 +1,136 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://sprites/black.png" type="Texture" id=1]
 [ext_resource path="res://entities/player.tscn" type="PackedScene" id=2]
+[ext_resource path="res://fonts/MedulaOne-Regular.ttf" type="DynamicFontData" id=3]
+
+[sub_resource type="GDScript" id=3]
+script/source = "extends Node2D
+
+
+# Declare member variables here. Examples:
+# var a: int = 2
+# var b: String = \"text\"
+var comp
+
+# Called when the node enters the scene tree for the first time.
+func _ready() -> void:
+	pass # Replace with function body.
+
+
+
+func _process(delta: float) -> void:
+	if $MAIN.pressed:
+		if comp != \"MAIN\":
+			$ColorPicker.color = $Player.playerColor[0].main
+			comp = \"MAIN\"
+		if $CORE.pressed:
+			$CORE.pressed = false
+		elif $WING1.pressed:
+			$WING1.pressed = false
+		elif $WING2.pressed:
+			$WING2.pressed = false
+	if $CORE.pressed:
+		if comp != \"CORE\":
+			$ColorPicker.color = $Player.playerColor[1].core
+			comp = \"CORE\"
+		if $WING1.pressed:
+			$WING1.pressed = false
+		elif $WING2.pressed:
+			$WING2.pressed = false
+	if $WING1.pressed:
+		if comp != \"WING1\":
+			$ColorPicker.color = $Player.playerColor[2].wing1
+			comp = \"WING1\"
+		if $WING2.pressed:
+			$WING2.pressed = false
+	if $WING2.pressed:
+		if comp != \"WING2\":
+			$ColorPicker.color = $Player.playerColor[3].wing2
+			comp = \"WING2\"
+
+
+	if comp == \"MAIN\":
+		$Player.playerColor[0].main = $ColorPicker.color
+	if comp == \"CORE\":
+		$Player.playerColor[1].core = $ColorPicker.color
+	if comp == \"WING1\":
+		$Player.playerColor[2].wing1 = $ColorPicker.color
+	if comp == \"WING2\":
+		$Player.playerColor[3].wing2 = $ColorPicker.color
+"
+
+[sub_resource type="GDScript" id=1]
+script/source = "extends KinematicBody2D
+
+
+# Declare member variables here. Examples:
+# var a: int = 2
+# var b: String = \"text\"
+var playerColor = [
+	{ #MAIN
+		\"main\": Color(0,0,0)
+	},
+	{ #CORE
+		\"core\": Color(0,0,0)
+	},
+	{ #WING1
+		\"wing1\": Color(0,0,0)
+	},
+	{ #WING2
+		\"wing2\": Color(0,0,0)
+	}
+	
+]
+
+# Called when the node enters the scene tree for the first time.
+func _ready() -> void:
+	pass # Replace with function body.
+
+func _physics_process(delta):
+
+	$Shaft/shaft0/colorPixel.color = playerColor[1].core
+	$wing0/wing0/colorPixel.color = playerColor[2].wing1
+	$wing1/wing0/colorPixel.color = playerColor[3].wing2
+
+	if playerColor[1].core == Color(0,0,0):
+		$Shaft/shaft0/colorPixel.color = playerColor[0].main
+	if playerColor[2].wing1 == Color(0,0,0):
+		$wing0/wing0/colorPixel.color = playerColor[0].main
+	if playerColor[3].wing2 == Color(0,0,0):
+		$wing1/wing0/colorPixel.color = playerColor[0].main
+"
+
+[sub_resource type="DynamicFont" id=2]
+size = 28
+font_data = ExtResource( 3 )
+
+[sub_resource type="DynamicFont" id=4]
+size = 32
+font_data = ExtResource( 3 )
+
+[sub_resource type="GDScript" id=5]
+script/source = "extends Button
+
+
+# Declare member variables here. Examples:
+# var a: int = 2
+# var b: String = \"text\"
+
+
+# Called when the node enters the scene tree for the first time.
+func _ready() -> void:
+	pass # Replace with function body.
+
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta: float) -> void:
+	if pressed:
+		get_tree().change_scene(\"res://World/title_screen.tscn\")
+"
 
 [node name="customize" type="Node2D"]
+script = SubResource( 3 )
 
 [node name="black" type="Sprite" parent="."]
 position = Vector2( 509.651, 311.83 )
@@ -11,9 +138,9 @@ scale = Vector2( 11.5664, 7.74446 )
 texture = ExtResource( 1 )
 
 [node name="Player" parent="." instance=ExtResource( 2 )]
-position = Vector2( 673.697, 275.335 )
+position = Vector2( 677.53, 200.463 )
 scale = Vector2( 3, 3 )
-script = null
+script = SubResource( 1 )
 
 [node name="ColorPicker" type="ColorPicker" parent="."]
 margin_left = 4.0
@@ -21,6 +148,76 @@ margin_top = 4.0
 margin_right = 4.0
 margin_bottom = 4.0
 edit_alpha = false
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="MAIN" type="Button" parent="."]
+margin_left = 1.0
+margin_top = 447.0
+margin_right = 108.0
+margin_bottom = 601.0
+toggle_mode = true
+text = "MAIN COLOR"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CORE" type="Button" parent="."]
+margin_left = 217.606
+margin_top = 447.324
+margin_right = 266.606
+margin_bottom = 601.324
+toggle_mode = true
+text = "CORE"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="WING1" type="Button" parent="."]
+margin_left = 135.277
+margin_top = 447.376
+margin_right = 217.277
+margin_bottom = 601.376
+toggle_mode = true
+text = "LEFT WING"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="WING2" type="Button" parent="."]
+margin_left = 268.0
+margin_top = 446.663
+margin_right = 362.0
+margin_bottom = 600.663
+toggle_mode = true
+text = "RIGHT WING"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="."]
+margin_left = 414.24
+margin_top = 447.027
+margin_right = 1080.24
+margin_bottom = 592.027
+custom_fonts/font = SubResource( 2 )
+text = "\"MAIN COLOR\" sets the color for all three components of the ship.
+
+Alternatively, you can set individual colors for each of the three components.
+If you wish for a component to inherit the main color again, set the RGB to 0, 0, 0."
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Button" type="Button" parent="."]
+margin_left = 604.0
+margin_top = 8.0
+margin_right = 751.0
+margin_bottom = 54.0
+custom_fonts/font = SubResource( 4 )
+text = "Title Screen"
+script = SubResource( 5 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
