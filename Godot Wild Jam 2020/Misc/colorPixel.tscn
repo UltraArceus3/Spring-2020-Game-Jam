@@ -6,4 +6,3 @@
 [node name="colorPixel" type="Sprite"]
 texture = ExtResource( 1 )
 script = ExtResource( 2 )
-color = Color( 1, 0, 0, 1 )

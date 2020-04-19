@@ -1,5 +1,7 @@
 extends KinematicBody2D
 
+var playerColor = Color(1,0,0)
+
 var angleMouse = round(get_angle_to(get_global_mouse_position()))
 var aim_speed = deg2rad(10)
 var direction
@@ -15,6 +17,10 @@ export var playerControl = false
 
 var canShoot = true
 
+var attackPlayer = false
+
+
+
 # Declare member variables here. Examples:
 # var a: int = 2
 # var b: String = "text"
@@ -22,15 +28,23 @@ var canShoot = true
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	pass # Replace with function body.
+		
+	if !playerControl:
+		playerColor = randomColor()
+		$ShootTimeout.wait_time = 1
+		
+
 
 func _physics_process(delta: float) -> void:
-	
-	print(Engine.get_frames_per_second())
-	
+	var get_playerControl = get_parent().get_parent().get_node("arrow").get_playerControl()
+
+	#print(Engine.get_frames_per_second())
+	print(position)
 	$ShaftCol.scale = $Shaft.get_child(ShaftBody).get_child(2).scale
-	
+
 	if playerControl:
+		$Camera2D.current = true
+		set_name("Player")
 		angleMouse = stepify(get_angle_to(get_global_mouse_position())+deg2rad(90), 0.1)
 	
 		direction = (get_global_mouse_position() - position).normalized()
@@ -68,6 +82,21 @@ func _physics_process(delta: float) -> void:
 		if Input.is_action_pressed("STOP"):
 			velo = Vector2.ZERO
 
+	if !playerControl:
+		$Camera2D.current = false
+		if name == "Player":
+			randomize()
+			set_name("Enemy" + str(randi()% 10000000))
+		
+		if attackPlayer:
+			var i = get_playerControl
+			rotation += (aim_speed/10)*stepify(get_angle_to(i.position)+deg2rad(90), 0.1)
+			shoot()
+			direction = (i.position - position).normalized()
+			if abs((i.position - position).length()) > 200:
+				velo = direction*100
+				move_and_slide(velo)
+
 
 func _on_ShootTimeout_timeout() -> void:
 	canShoot = true
@@ -78,8 +107,28 @@ func shoot():
 		var i = bullet.instance()
 		i.shooterVol = velo
 		i.shooterPos = position
+		i.passedColor = playerColor
 		i.rotation = rotation
 		i.position = $position_calc.global_position
 		get_parent().get_parent().add_child(i)
 		canShoot = false
 		$ShootTimeout.start()
+
+
+func _on_Area2D_body_entered(body: Node) -> void:
+	if body.name == "Player":
+		attackPlayer = true
+
+
+func _on_Area2D_body_exited(body: Node) -> void:
+	if body.name == "Player":
+		attackPlayer = false
+
+func randomColor():
+	randomize()
+	var red = randf()
+	randomize()
+	var blue = randf()
+	randomize()
+	var green = randf()
+	return Color(red,blue,green)
