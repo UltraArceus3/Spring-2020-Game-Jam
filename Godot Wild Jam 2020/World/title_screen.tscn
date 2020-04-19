@@ -1,12 +1,13 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://sprites/black.png" type="Texture" id=1]
 [ext_resource path="res://fonts/chintzy.ttf" type="DynamicFontData" id=2]
 [ext_resource path="res://fonts/Audiowide-Regular.ttf" type="DynamicFontData" id=3]
 [ext_resource path="res://entities/player.tscn" type="PackedScene" id=4]
+[ext_resource path="res://global.gd" type="Script" id=5]
 
 [sub_resource type="DynamicFont" id=1]
-size = 128
+size = 256
 font_data = ExtResource( 2 )
 
 [sub_resource type="DynamicFont" id=2]
@@ -33,10 +34,10 @@ func _process(delta: float) -> void:
 		get_tree().change_scene(\"res://World/MAIN.tscn\")
 "
 
-[sub_resource type="DynamicFont" id=6]
+[sub_resource type="DynamicFont" id=4]
 font_data = ExtResource( 3 )
 
-[sub_resource type="GDScript" id=7]
+[sub_resource type="GDScript" id=5]
 script/source = "extends Button
 
 
@@ -55,20 +56,65 @@ func _process(delta: float) -> void:
 		get_tree().change_scene(\"res://entities/customize.tscn\")
 "
 
-[sub_resource type="DynamicFont" id=4]
+[sub_resource type="DynamicFont" id=6]
 font_data = ExtResource( 2 )
 
-[sub_resource type="DynamicFont" id=5]
+[sub_resource type="DynamicFont" id=7]
 size = 27
+font_data = ExtResource( 2 )
+
+[sub_resource type="GDScript" id=8]
+script/source = "extends KinematicBody2D
+
+
+# Declare member variables here. Examples:
+# var a: int = 2
+# var b: String = \"text\"
+var playerColor = [
+	{ #MAIN
+		\"main\": Color(0,0,0)
+	},
+	{ #CORE
+		\"core\": Color(0,0,0)
+	},
+	{ #WING1
+		\"wing1\": Color(0,0,0)
+	},
+	{ #WING2
+		\"wing2\": Color(0,0,0)
+	}
+	
+]
+
+# Called when the node enters the scene tree for the first time.
+func _ready() -> void:
+	playerColor = Global.playerColor
+
+func _physics_process(delta):
+
+	$Shaft/shaft0/colorPixel.color = playerColor[1].core
+	$wing0/wing0/colorPixel.color = playerColor[2].wing1
+	$wing1/wing0/colorPixel.color = playerColor[3].wing2
+
+	if playerColor[1].core == Color(0,0,0):
+		$Shaft/shaft0/colorPixel.color = playerColor[0].main
+	if playerColor[2].wing1 == Color(0,0,0):
+		$wing0/wing0/colorPixel.color = playerColor[0].main
+	if playerColor[3].wing2 == Color(0,0,0):
+		$wing1/wing0/colorPixel.color = playerColor[0].main
+"
+
+[sub_resource type="DynamicFont" id=9]
+size = 32
 font_data = ExtResource( 2 )
 
 [node name="titlescreen" type="Node2D"]
 
 [node name="TextureRect" type="TextureRect" parent="."]
 margin_left = -43.0
-margin_top = -16.5863
-margin_right = 1060.0
-margin_bottom = 620.414
+margin_top = -17.0
+margin_right = 1956.0
+margin_bottom = 1118.0
 texture = ExtResource( 1 )
 expand = true
 __meta__ = {
@@ -76,10 +122,10 @@ __meta__ = {
 }
 
 [node name="Label" type="Label" parent="."]
-margin_left = 1.29236
-margin_top = 45.4153
-margin_right = 1022.29
-margin_bottom = 163.415
+margin_left = -2.0
+margin_top = 42.0
+margin_right = 1920.0
+margin_bottom = 273.0
 custom_fonts/font = SubResource( 1 )
 text = "Spaoter"
 align = 1
@@ -89,10 +135,10 @@ __meta__ = {
 }
 
 [node name="Button" type="Button" parent="."]
-margin_left = 420.261
-margin_top = 192.446
-margin_right = 608.261
-margin_bottom = 244.446
+margin_left = 866.107
+margin_top = 442.353
+margin_right = 1054.11
+margin_bottom = 494.353
 custom_fonts/font = SubResource( 2 )
 text = "Play Game"
 script = SubResource( 3 )
@@ -101,34 +147,34 @@ __meta__ = {
 }
 
 [node name="Button2" type="Button" parent="."]
-margin_left = 51.3697
-margin_top = 85.4139
-margin_right = 162.37
-margin_bottom = 117.414
-custom_fonts/font = SubResource( 6 )
+margin_left = 136.944
+margin_top = 181.08
+margin_right = 247.944
+margin_bottom = 213.08
+custom_fonts/font = SubResource( 4 )
 text = "Customize"
-script = SubResource( 7 )
+script = SubResource( 5 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Label2" type="Label" parent="."]
-margin_left = 633.797
-margin_top = 149.096
-margin_right = 782.797
-margin_bottom = 164.096
-custom_fonts/font = SubResource( 4 )
+margin_left = 1292.58
+margin_top = 247.427
+margin_right = 1441.58
+margin_bottom = 262.427
+custom_fonts/font = SubResource( 6 )
 text = "By UltraArceus3"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Label3" type="Label" parent="."]
-margin_left = 183.241
-margin_top = 331.937
-margin_right = 845.241
-margin_bottom = 552.937
-custom_fonts/font = SubResource( 5 )
+margin_left = 630.412
+margin_top = 648.2
+margin_right = 1292.41
+margin_bottom = 897.2
+custom_fonts/font = SubResource( 7 )
 text = "CONTROLS:
 
 Accelerate: (W) Key / Up Key / Right Click
@@ -136,12 +182,27 @@ Accelerate: (W) Key / Up Key / Right Click
 Stop Ship: (S) Key / Down Key / Middle Click
 
 Shoot: Space Bar / Left Click
-"
+
+Close Game: ESC key"
 align = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Player" parent="." instance=ExtResource( 4 )]
-position = Vector2( 106.763, 39.4075 )
-script = null
+position = Vector2( 192.995, 89.7574 )
+script = SubResource( 8 )
+
+[node name="Global" type="Node" parent="."]
+script = ExtResource( 5 )
+
+[node name="Label4" type="Label" parent="."]
+margin_left = 481.802
+margin_top = 258.729
+margin_right = 917.802
+margin_bottom = 288.729
+custom_fonts/font = SubResource( 9 )
+text = "\"AI Machine Broke\" Edition"
+__meta__ = {
+"_edit_use_anchors_": false
+}

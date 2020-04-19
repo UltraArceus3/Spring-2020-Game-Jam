@@ -8,9 +8,11 @@ var rot = 0
 var shooterPos = Vector2.ZERO
 var shooterVol = Vector2.ZERO
 
+var damage = 5
 var color = Color(-1,-1,-1)
 
-var passedColor = Color(0,0,0)
+var shooterColor
+
 # Declare member variables here. Examples:
 # var a: int = 2
 # var b: String = "text"
@@ -22,14 +24,26 @@ func _ready() -> void:
 
 func _physics_process(delta: float) -> void:
 	
-	if color == Color(-1,-1,-1):
-		color = passedColor
-	modulate = color
-	vol = ((position - shooterPos).normalized()  * 5000)
-	move_and_slide(vol)
-	pass
-	
 
+	modulate = color
+	vol = ((position - shooterPos).normalized()  * 100)
+	var col = move_and_collide(vol)
+	
+	if col:
+		print(col.collider.name)
+		var i = get_parent().get_node("Entities/" + col.collider.name)
+
+			
+		i.health -= damage
+		
+		if i.playerInfluenced and i.health < 1:
+			i.playerColor = shooterColor
+			
+		queue_free()
 
 func _on_destroyTime_timeout() -> void:
 	queue_free()
+	
+func enemy():
+	set_collision_mask(0)
+	damage = 10

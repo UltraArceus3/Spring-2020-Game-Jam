@@ -1,12 +1,14 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://entities/player.tscn" type="PackedScene" id=1]
 [ext_resource path="res://sprites/no.png" type="Texture" id=2]
+[ext_resource path="res://World/Entities.gd" type="Script" id=3]
 [ext_resource path="res://sprites/black.png" type="Texture" id=4]
 [ext_resource path="res://sprites/star.png" type="Texture" id=5]
 [ext_resource path="res://World/Background.gd" type="Script" id=6]
 [ext_resource path="res://entities/arrow.tscn" type="PackedScene" id=7]
 [ext_resource path="res://World/MAIN.gd" type="Script" id=8]
+[ext_resource path="res://loading.png" type="Texture" id=9]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 10806.3, 129.913 )
@@ -15,6 +17,7 @@ extents = Vector2( 10806.3, 129.913 )
 script = ExtResource( 8 )
 
 [node name="Entities" type="Node2D" parent="."]
+script = ExtResource( 3 )
 
 [node name="Player" parent="Entities" instance=ExtResource( 1 )]
 position = Vector2( 1250.26, 476.797 )
@@ -22,6 +25,9 @@ playerControl = true
 
 [node name="Player2" parent="Entities" instance=ExtResource( 1 )]
 position = Vector2( 2443.91, 821.753 )
+
+[node name="Player3" parent="Entities" instance=ExtResource( 1 )]
+position = Vector2( 2049.94, 1341.39 )
 
 [node name="arrow" parent="." instance=ExtResource( 7 )]
 position = Vector2( 484.077, 286.369 )
@@ -39,10 +45,10 @@ scroll_base_scale = Vector2( 0.001, 0.001 )
 motion_offset = Vector2( 5, 5 )
 
 [node name="TextureRect" type="TextureRect" parent="Background/ParallaxBackground/background"]
-margin_left = -8954.19
-margin_top = -10375.7
-margin_right = 12160.8
-margin_bottom = 11132.3
+margin_left = -8893.06
+margin_top = -10226.3
+margin_right = 12221.9
+margin_bottom = 11281.7
 texture = ExtResource( 4 )
 expand = true
 stretch_mode = 2
@@ -156,6 +162,14 @@ rect_scale = Vector2( 32, 32 )
 texture = ExtResource( 2 )
 expand = true
 stretch_mode = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TextureRect" type="TextureRect" parent="."]
+margin_right = 1920.0
+margin_bottom = 1080.0
+texture = ExtResource( 9 )
 __meta__ = {
 "_edit_use_anchors_": false
 }

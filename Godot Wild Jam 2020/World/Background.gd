@@ -71,4 +71,8 @@ func _process(delta):
 		
 		print(starCurrent.frontCount)
 		
+
+		
 		starCurrent.frontCount += 1
+		
+	get_parent().get_node("TextureRect").visible = false
