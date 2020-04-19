@@ -11,7 +11,9 @@ var bullet = preload("res://entities/Bullet.tscn")
 
 export var acceleration = 5
 
+export var playerControl = false
 
+var canShoot = true
 
 # Declare member variables here. Examples:
 # var a: int = 2
@@ -24,17 +26,20 @@ func _ready() -> void:
 
 func _physics_process(delta: float) -> void:
 	
+	print(Engine.get_frames_per_second())
+	
 	$ShaftCol.scale = $Shaft.get_child(ShaftBody).get_child(2).scale
 	
-	angleMouse = stepify(get_angle_to(get_global_mouse_position())+deg2rad(90), 0.1)
+	if playerControl:
+		angleMouse = stepify(get_angle_to(get_global_mouse_position())+deg2rad(90), 0.1)
 	
-	direction = (get_global_mouse_position() - position).normalized()
+		direction = (get_global_mouse_position() - position).normalized()
 	
-	var col = move_and_collide(velo * delta)
+		var col = move_and_collide(velo * delta)
 	
-	if col:
-		velo /= 2
-		velo = velo.bounce(col.normal)
+		if col:
+			velo /= 2
+			velo = velo.bounce(col.normal)
 		
 	
 	#print(col)
@@ -49,20 +54,32 @@ func _physics_process(delta: float) -> void:
 	#print((get_global_mouse_position() - position).length())
 	
 	#print(angleMouse)
-	if angleMouse != 0:
-		rotation += aim_speed*angleMouse
+		if angleMouse != 0:
+			rotation += aim_speed*angleMouse
 	
 
-	if Input.is_action_pressed("forward"):
-		if abs((get_global_mouse_position() - position).length()) > 3:
-			velo += direction*acceleration
+		if Input.is_action_pressed("forward"):
+			if abs((get_global_mouse_position() - position).length()) > 3:
+				velo += direction*acceleration
 			
-	if Input.is_action_pressed("schut"):
-		var i = bullet.instance()
-		i.rot = rotation
-		i.position = $position_calc.global_position
-		get_parent().add_child(i)
+		if Input.is_action_pressed("schut"):
+			shoot()
 		
-	if Input.is_action_pressed("STOP"):
-		velo = Vector2.ZERO
+		if Input.is_action_pressed("STOP"):
+			velo = Vector2.ZERO
 
+
+func _on_ShootTimeout_timeout() -> void:
+	canShoot = true
+
+
+func shoot():
+	if canShoot:
+		var i = bullet.instance()
+		i.shooterVol = velo
+		i.shooterPos = position
+		i.rotation = rotation
+		i.position = $position_calc.global_position
+		get_parent().get_parent().add_child(i)
+		canShoot = false
+		$ShootTimeout.start()
